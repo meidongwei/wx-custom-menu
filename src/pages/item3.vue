@@ -9,11 +9,11 @@
     <p v-else class="tip">字数不超过4个汉字或8个字母</p>
     <div class="form-item">
       <span>菜单名称</span>
-      <input v-model="name" @blur="handleAddItem2" type="text">
+      <input v-model="name" @blur="handleAddItem3" type="text">
     </div>
     <div v-if="!subList" class="form-item">
       <span>页面地址</span>
-      <input v-model="url" @blur="handleAddUrl2" type="text">
+      <input v-model="url" @blur="handleAddUrl3" type="text">
     </div>
   </div>
 </template>
@@ -33,15 +33,15 @@ export default {
     }
   },
   methods: {
-    handleAddItem2 () {
-      this.$bus.emit('handleAddItem2', this.name)
+    handleAddItem3 () {
+      this.$bus.emit('handleAddItem3', this.name)
     },
-    handleAddUrl2 () {
-      this.$bus.emit('handleAddUrl2', this.url)
+    handleAddUrl3 () {
+      this.$bus.emit('handleAddUrl3', this.url)
     },
     handleDeleteItem () {
       if (this.item !== null) {
-        this.$bus.emit('handleDeleteItem', 2)
+        this.$bus.emit('handleDeleteItem', 3)
       }
     }
   }
