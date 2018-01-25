@@ -1,22 +1,14 @@
 <template>
-  <div class="container">
-    <div class="preview">
-      <Preview></Preview>
-    </div>
-    <div class="info">
-      <Info></Info>
-    </div>
-  </div>
+  <Preview></Preview>
 </template>
 
 <script>
-import Preview from '@/components/preview'
-import Info from '@/components/info'
+import Preview from '@/pages/preview'
+
 export default {
   name: 'App',
   components: {
-    Preview,
-    Info
+    Preview
   }
 }
 </script>
@@ -40,15 +32,12 @@ fieldset,img{border:0;}
 button,input,select,textarea{font-size:100%;}
 table{border-collapse:collapse;border-spacing:0;}
 
-.container {
-  display: flex;
+
+a {
+  color: #5c5c5c;
 }
-.preview {
-  padding: 20px;
-}
-.info {
-  padding: 20px;
-  width: 100%;
+a:hover {
+  color: #32b16c;
 }
 .pageTitle {
   border-bottom: 1px solid #e3e3e3;
@@ -64,23 +53,34 @@ table{border-collapse:collapse;border-spacing:0;}
 .pageTitle > a {
   padding: 13px 0;
 }
-.tip {
+.tip1 {
   color: #b6b6b6;
   font-size: 14px;
-  margin-bottom: 30px;
+}
+.tip2 {
+  color: #b6b6b6;
+  font-size: 14px;
 }
 .form-item {
-  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
 }
-.form-item > span {
+.form-item > h2 {
   margin-right: 15px;
+  margin-top: 9px;
 }
-.form-item > input {
+.form-item input {
   height: 38px;
-  width: 300px;
+  width: 250px;
   padding-left: 10px;
   border-radius: 3px;
   /* border: none; */
   border: 1px solid #e3e3e3;
+  margin-bottom: 5px;
+}
+.active a {
+  color: #32b16c;
+  border: 1px solid #32b16c;
 }
 </style>

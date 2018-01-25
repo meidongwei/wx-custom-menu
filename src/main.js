@@ -6,8 +6,8 @@ import router from './router'
 
 Vue.config.productionTip = false
 
-import Bus from '@/bus'
-Vue.use(Bus)
+// import Bus from '@/bus'
+// Vue.use(Bus)
 
 /* eslint-disable no-new */
 new Vue({
