@@ -3,28 +3,28 @@
     <!-- 主菜单信息 -->
     <div v-if="isShow === 1">
       <div class="pageTitle">
-        <h1>{{ obj.name }}</h1>
+        <h1>{{ itemObj.name }}</h1>
         <a @click="handleDeleteItem" href="javascript:;">删除菜单</a>
       </div>
       <p v-if="isHasSubList" class="tip1">已添加子菜单，仅可设置菜单名称</p>
       <div class="form-item">
         <h2>菜单名称</h2>
         <div>
-          <input v-model="obj.name" @blur="handleUpdateData" type="text">
+          <input v-model="itemObj.name" @blur="handleUpdateData" type="text">
           <p class="tip2">字数不超过4个汉字或8个字母</p>
         </div>
       </div>
 
       <div v-if="!isHasSubList" class="form-item">
         <h2>页面地址</h2>
-        <input v-model="obj.url" @blur="handleUpdateData" type="text">
+        <input v-model="itemObj.url" @blur="handleUpdateData" type="text">
       </div>
     </div>
 
     <!-- 子菜单信息 -->
     <div v-if="isShow === 2">
       <div class="pageTitle">
-        <h1>{{ obj.name }}</h1>
+        <h1>{{ itemObj.name }}</h1>
         <a @click="handleDeleteSubItem" href="javascript:;">删除子菜单</a>
       </div>
       <p v-if="isHasSubList" class="tip1">已添加子菜单，仅可设置菜单名称</p>
@@ -32,13 +32,13 @@
       <div class="form-item">
         <h2>子菜单名称</h2>
         <div>
-          <input v-model="obj.name" @blur="handleUpdateSubData" type="text">
+          <input v-model="itemObj.name" @blur="handleUpdateSubData" type="text">
           <p class="tip2">字数不超过8个汉字或16个字母</p>
         </div>
       </div>
       <div class="form-item">
         <h2>子页面地址</h2>
-        <input v-model="obj.url" @blur="handleUpdateSubData" type="text">
+        <input v-model="itemObj.url" @blur="handleUpdateSubData" type="text">
       </div>
     </div>
 
@@ -64,7 +64,7 @@ export default {
       type: Number,
       default: 0
     },
-    obj: {
+    itemObj: {
       type: Object,
       default () {
         return {
@@ -89,15 +89,15 @@ export default {
   methods: {
     handleUpdateData () {
       let item = {
-        name: this.obj.name,
-        id: this.obj.id,
-        url: this.obj.url,
-        subList: this.obj.subList
+        name: this.itemObj.name,
+        id: this.itemObj.id,
+        url: this.itemObj.url,
+        subList: this.itemObj.subList
       }
       this.$emit('handleUpdateData', item)
     },
     handleDeleteItem () {
-      this.$emit('handleDeleteItem', this.obj.id)
+      this.$emit('handleDeleteItem', this.itemObj.id)
     },
     handleDeleteSubItem () {
       // console.log('要删除的tabId：'+this.tabId)
@@ -111,9 +111,9 @@ export default {
     // 子菜单
     handleUpdateSubData () {
       let sub = {
-        name: this.obj.name,
-        id: this.obj.id,
-        url: this.obj.url
+        name: this.itemObj.name,
+        id: this.itemObj.id,
+        url: this.itemObj.url
       }
       let data = {
         tabId: this.tabId,
@@ -126,4 +126,44 @@ export default {
 </script>
 
 <style scoped>
+.pageTitle {
+  border-bottom: 1px solid #e3e3e3;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.pageTitle > h1 {
+  font-size: 20px;
+  padding: 10px 0;
+}
+.pageTitle > a {
+  padding: 13px 0;
+}
+.tip1 {
+  color: #b6b6b6;
+  font-size: 14px;
+}
+.tip2 {
+  color: #b6b6b6;
+  font-size: 14px;
+}
+.form-item {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+}
+.form-item > h2 {
+  margin-right: 15px;
+  margin-top: 9px;
+}
+.form-item input {
+  height: 38px;
+  width: 250px;
+  padding-left: 10px;
+  border-radius: 3px;
+  /* border: none; */
+  border: 1px solid #e3e3e3;
+  margin-bottom: 5px;
+}
 </style>

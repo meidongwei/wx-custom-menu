@@ -28,8 +28,8 @@
       <!-- navbar end -->
     </div>
     <div class="info">
-      <Info :isShow="isShowItem" :tabId="infoTabId" :subId="subId"
-        :obj="item1" :isHasSubList="isHasSubList"
+      <Info :isShow="isShowInfo" :tabId="infoTabId" :subId="subId"
+        :itemObj="itemObj" :isHasSubList="isHasSubList"
         @handleUpdateData="handleUpdateData"
         @handleDeleteItem="handleDeleteItem"
         @handleUpdateSubData="handleUpdateSubData"
@@ -41,6 +41,7 @@
 <script>
 import Info from '@/components/info'
 import SubTab from '@/components/subTab'
+import axios from 'axios'
 export default {
   components: {
     Info,
@@ -49,21 +50,25 @@ export default {
   data () {
     return {
       navList: [],
+
       name: '菜单',
       url: '',
-      isShowItem: 0,
-      item1: null,
       id: 1,
       subList: [],
-      isShowSubTab: false,
-      subTab: null,
-      subTabs: [],
-      tabId: 1,
-      subId: 1,
-      infoTabId: 1,
-      isHasSubList: false,
-      nowIndex: '',
-      movePanel: 'item1'
+
+      isShowInfo: 0, // 是否显示 Info 组件('1':主菜单 | '2':子菜单 | '0':欢迎页)
+      itemObj: null, // Info 组件的对象
+
+      isShowSubTab: false, // 是否显示 SubTab 组件
+      subTabs: [], // SubTab 组件的列表
+
+      tabId: 1, // 用于传入 SubTab 组件
+      subId: 1, // 用于传入 Info 组件
+      infoTabId: 1, // 用于传入 Info 组件
+
+      isHasSubList: false, // 是否有 subList（用于 Info 组件）
+      nowIndex: '', // 当前选项（用于样式选中 active）
+      movePanel: '' // 用于样式切换：item1, item2, item3
     }
   },
   computed: {
@@ -77,35 +82,37 @@ export default {
   },
   methods: {
     handleAddItem () {
-
-      this.isShowItem = 1
+      // 点击 “增加” 按钮时，显示 Info 组件，隐藏 SubTab 组件
+      this.isShowInfo = 1
       this.isShowSubTab = false
 
-      let item = {}
-      item.name = this.name,
-      item.url = this.url,
-      item.id = this._id,
-      item.subList = []
+      let item = {
+        name: this.name,
+        url: this.url,
+        id: this._id,
+        subList: []
+      }
 
       if (this.navList.length < 3) {
         this.navList.push(item)
-        this.item1 = item
+        this.itemObj = item
       } else {
         console.log('只能添加3项')
       }
     },
     handleUpdateItem (index) {
       // 显示 Info 组件（主菜单信息）
-      this.isShowItem = 1
-      let item = {}
-      item.name = this.navList[index].name,
-      item.url = this.navList[index].url,
-      item.id = this.navList[index].id,
-      item.subList = this.navList[index].subList
-      this.item1 = item
+      this.isShowInfo = 1
+      let item = {
+        name: this.navList[index].name,
+        url: this.navList[index].url,
+        id: this.navList[index].id,
+        subList: this.navList[index].subList
+      }
+      this.itemObj = item
 
-      // 显示 subTab 组件
-      // 传 tabId 给 subTab 组件
+      // 显示 SubTab 组件
+      // 传 tabId 给 SubTab 组件
       // 传 tabId 给 Info 组件
       this.subTabs = item.subList
       this.tabId = this.navList[index].id
@@ -122,6 +129,7 @@ export default {
 
       // 点击变换样式
       this.nowIndex = index
+
       // 点击移动位置
       if (index === 0) {
         this.movePanel = 'item1'
@@ -149,7 +157,7 @@ export default {
           this.navList.splice(i, 1)
         }
       }
-      this.isShowItem = 0
+      this.isShowInfo = 0
       this.isShowSubTab = false
     },
     handleDeleteSubItem (val) {
@@ -162,11 +170,11 @@ export default {
           }
         }
       }
-      this.isShowItem = 0
+      this.isShowInfo = 0
     },
     showSubInfo (val) {
-      this.isShowItem = val.isShowSub
-      this.item1 = val.sub
+      this.isShowInfo = val.isShowSub
+      this.itemObj = val.sub
       // 根据 id 把 sub 存入 navList.subList
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId && this.navList[i].subList.length < 5) {
@@ -175,7 +183,6 @@ export default {
         }
       }
       this.subId = val.sub.id
-
     },
     handleUpdateSubData (val) {
       this.isShowSubTab = true
@@ -193,6 +200,16 @@ export default {
     },
     getDatas () {
       // 获取数据
+      axios.get('getDatas')
+      .then(res => {
+        if (res.errcode === 0) {
+          console.log('success')
+
+        } else {
+          console.log(res.errmsg)
+        }
+      })
+      .catch(err => console.log(err))
     }
   },
   created () {

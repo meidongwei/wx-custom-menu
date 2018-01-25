@@ -1,5 +1,10 @@
 <template>
-  <Preview></Preview>
+  <div>
+    <Preview></Preview>
+    <div class="box">
+      <a class="btn" href="javascript:;">保存并发布</a>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -24,7 +29,6 @@ code,kbd,pre,samp{font-family:courier new,courier,monospace;}
 small{font-size:12px;}
 ul,ol{list-style:none;}
 a{text-decoration:none;}
-/* a:hover{text-decoration:underline;} */
 sup{vertical-align:text-top;}
 sub{vertical-align:text-bottom;}
 legend{color:#000;}
@@ -32,55 +36,29 @@ fieldset,img{border:0;}
 button,input,select,textarea{font-size:100%;}
 table{border-collapse:collapse;border-spacing:0;}
 
-
+/* 通用样式 */
 a {
   color: #5c5c5c;
 }
 a:hover {
   color: #32b16c;
 }
-.pageTitle {
-  border-bottom: 1px solid #e3e3e3;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.pageTitle > h1 {
-  font-size: 20px;
-  padding: 10px 0;
-}
-.pageTitle > a {
-  padding: 13px 0;
-}
-.tip1 {
-  color: #b6b6b6;
-  font-size: 14px;
-}
-.tip2 {
-  color: #b6b6b6;
-  font-size: 14px;
-}
-.form-item {
-  margin-top: 20px;
-  margin-bottom: 10px;
-  display: flex;
-}
-.form-item > h2 {
-  margin-right: 15px;
-  margin-top: 9px;
-}
-.form-item input {
-  height: 38px;
-  width: 250px;
-  padding-left: 10px;
-  border-radius: 3px;
-  /* border: none; */
-  border: 1px solid #e3e3e3;
-  margin-bottom: 5px;
-}
 .active a {
   color: #32b16c;
   border: 1px solid #32b16c;
+}
+.btn {
+  padding: 10px 35px;
+  border-radius: 3px;
+  background-color: #32b16c;
+  color: white;
+}
+.btn:hover {
+  color: white;
+  background-color: #229556;
+}
+.box {
+  display: flex;
+  justify-content: center;
 }
 </style>
