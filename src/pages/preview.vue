@@ -5,7 +5,7 @@
         <h3>青春版品质 Test</h3>
       </div>
       <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quasi, beatae.</p>
+        <p></p>
       </div>
       <div class="navbar">
         <div class="icon-keyboard">
@@ -22,7 +22,7 @@
           </a>
         </div>
         <SubTab :isShow="isShowSubTab" class="subTab"
-          :subTabs="subTabs" :tabId="tabId"
+          :subTabs="subTabs" :tabId="tabId" :class="movePanel"
           @showSubInfo="showSubInfo"></SubTab>
       </div>
       <!-- navbar end -->
@@ -49,7 +49,7 @@ export default {
   data () {
     return {
       navList: [],
-      name: 'item',
+      name: '菜单',
       url: '',
       isShowItem: 0,
       item1: null,
@@ -62,7 +62,8 @@ export default {
       subId: 1,
       infoTabId: 1,
       isHasSubList: false,
-      nowIndex: ''
+      nowIndex: '',
+      movePanel: 'item1'
     }
   },
   computed: {
@@ -121,6 +122,15 @@ export default {
 
       // 点击变换样式
       this.nowIndex = index
+      // 点击移动位置
+      if (index === 0) {
+        this.movePanel = 'item1'
+      } else if (index === 1) {
+        this.movePanel = 'item2'
+      } else {
+        this.movePanel = 'item3'
+      }
+
     },
 
     // 监听子组件触发的方法
@@ -178,16 +188,32 @@ export default {
               this.navList[i].subList.splice(j, 1, val.sub)
             }
           }
-
-
         }
       }
+    },
+    getDatas () {
+      // 获取数据
     }
+  },
+  created () {
+    this.getDatas()
   }
 }
 </script>
 
 <style scoped>
+.item1 {
+  width: 80px;
+  margin-left: 50px;
+}
+.item2 {
+  width: 80px;
+  margin-left: 134px;
+}
+.item3 {
+  width: 80px;
+  margin-left: 217px;
+}
 .container {
   padding: 20px;
   display: flex;
@@ -239,7 +265,7 @@ export default {
 .navbar > .item {
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -265,8 +291,5 @@ export default {
 .subTab {
   position: absolute;
   bottom: 65px;
-  left: -1px;
-  width: 100px;
-  margin-left: 50px;
 }
 </style>

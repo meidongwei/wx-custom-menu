@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       isShowSub: 2,
-      name: 'subItem',
+      name: '子菜单',
       url: '',
       id: 1,
       nowIndex: ''
