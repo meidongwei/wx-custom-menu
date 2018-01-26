@@ -71,7 +71,8 @@ export default {
           name: '',
           url: '',
           id: 0,
-          subList: []
+          sub_button: [],
+          type: ''
         }
       }
     },
@@ -92,7 +93,8 @@ export default {
         name: this.itemObj.name,
         id: this.itemObj.id,
         url: this.itemObj.url,
-        subList: this.itemObj.subList
+        sub_button: this.itemObj.sub_button,
+        type: this.itemObj.type
       }
       this.$emit('handleUpdateData', item)
     },
@@ -113,7 +115,8 @@ export default {
       let sub = {
         name: this.itemObj.name,
         id: this.itemObj.id,
-        url: this.itemObj.url
+        url: this.itemObj.url,
+        type: this.itemObj.type
       }
       let data = {
         tabId: this.tabId,

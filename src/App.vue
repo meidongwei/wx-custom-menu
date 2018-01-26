@@ -1,9 +1,6 @@
 <template>
   <div>
     <Preview></Preview>
-    <div class="box">
-      <a class="btn" href="javascript:;">保存并发布</a>
-    </div>
   </div>
 </template>
 
@@ -49,7 +46,7 @@ a:hover {
 }
 .btn {
   padding: 10px 35px;
-  border-radius: 3px;
+  border-radius: 4px;
   background-color: #32b16c;
   color: white;
 }

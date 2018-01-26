@@ -31,33 +31,22 @@ export default {
     },
     tabId: {
       type: Number,
-      default: 1
+      default: 0
     }
   },
   data () {
     return {
       isShowSub: 2,
-      name: '子菜单',
-      url: '',
-      id: 1,
       nowIndex: ''
-    }
-  },
-  computed: {
-    _id () {
-      if (this.subTabs.length < 5) {
-        return this.id++
-      } else {
-        return this.id - 1
-      }
     }
   },
   methods: {
     handleAddSubItem () {
       let sub = {
-        name: this.name,
-        url: this.url,
-        id: this._id
+        name: '子菜单',
+        url: '',
+        id: Math.floor(Math.random()*100000),
+        type: 'view'
       }
 
       let data = {
@@ -72,7 +61,8 @@ export default {
       let sub = {
         name: this.subTabs[index].name,
         url: this.subTabs[index].url,
-        id: this.subTabs[index].id
+        id: this.subTabs[index].id,
+        type: this.subTabs[index].type
       }
       let data = {
         isShowSub: this.isShowSub,

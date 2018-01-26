@@ -9,6 +9,8 @@ Vue.config.productionTip = false
 // import Bus from '@/bus'
 // Vue.use(Bus)
 
+// import mock from './mock/mock'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
