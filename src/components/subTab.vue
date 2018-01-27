@@ -4,11 +4,11 @@
       <div v-for="(sub, index) in subTabs" :key="index" class="item">
         <div @click="handleUpdateSubItem(index)"
           :class="{ 'active': nowIndex === index }">
-          <a href="javascript:;">{{ sub.name }}</a>
+          <a>{{ sub.name }}</a>
         </div>
       </div>
       <div v-if="this.subTabs.length < 5" class="item add">
-        <a @click="handleAddSubItem" href="javascript:;">
+        <a @click="handleAddSubItem">
           <img src="@/assets/plus.png">
         </a>
       </div>

@@ -11,6 +11,8 @@ Vue.config.productionTip = false
 
 // import mock from './mock/mock'
 
+import './assets/bootstrap/css/bootstrap.min.css'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

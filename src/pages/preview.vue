@@ -1,25 +1,27 @@
 <template>
-  <div class="wrap">
-    <div class="wrap-header"><strong>会员中心</strong></div>
-    <div class="container">
+  <div class="panel panel-default" style="border:0;border-radius:0;box-shadow:none;">
+    <div class="panel-heading">
+      <h3 class="panel-title">
+        会员中心
+      </h3>
+    </div>
+    <div class="panel-body" style="display:flex;padding-right:15px;">
       <div class="segment">
         <div class="header">
-          <h3>青春版品质 Test</h3>
+          <h3>{{ wxname }}</h3>
         </div>
-        <div class="content">
-          <p></p>
-        </div>
+        <div class="content"></div>
         <div class="navbar">
           <div class="icon-keyboard">
             <img src="../assets/keyboard.png">
           </div>
           <div v-for="(item, index) in navList" :key="index"
-            @click="handleUpdateItem(index)"
-            :class="{ 'active': nowIndex === index }" class="item">
-            <a href="javascript:;">{{ item.name }}</a>
+            @click="handleUpdateItem(index)" class="item"
+            :class="{ 'active': nowIndex === index }">
+            <a>{{ item.name }}</a>
           </div>
-          <div v-if="this.navList.length < 3" class="item icon-plus">
-            <a @click="handleAddItem" href="javascript:;">
+          <div v-if="this.navList.length < 3" class="icon-plus">
+            <a @click="handleAddItem">
               <img src="../assets/plus.png">
             </a>
           </div>
@@ -39,8 +41,11 @@
       </div>
     </div>
     <div class="box">
-      <a @click="handleSave" class="btn" href="javascript:;">保存并发布</a>
+      <button @click="handleSave" class="btn btn-primary">保存并发布</button>
     </div>
+    <!-- toast -->
+    <Toast :isShowToast="isShowToast" :toastMsg="toastMsg"></Toast>
+    <!-- toast end -->
   </div>
 </template>
 
@@ -49,15 +54,21 @@ import Info from '@/components/info'
 import SubTab from '@/components/subTab'
 import axios from 'axios'
 import httpUrl from '@/http_url'
-import Vue from 'vue'
+// import Vue from 'vue'
+import Toast from '@/components/toast'
 export default {
   components: {
     Info,
-    SubTab
+    SubTab,
+    Toast
   },
   data () {
     return {
       navList: [],
+      wxname: '',
+
+      toastMsg: '123',
+      isShowToast: false,
 
       isShowInfo: 0, // 是否显示 Info 组件('1':主菜单 | '2':子菜单 | '0':欢迎页)
       itemObj: null, // Info 组件的对象
@@ -87,12 +98,11 @@ export default {
         sub_button: [],
         type: 'view'
       }
+      this.isHasSubList = false
 
       if (this.navList.length < 3) {
         this.navList.push(item)
         this.itemObj = item
-      } else {
-        console.log('只能添加3项')
       }
     },
     handleUpdateItem (index) {
@@ -163,14 +173,21 @@ export default {
 
       let param = new URLSearchParams()
       param.append("bizContent", JSON.stringify(a))
-      console.log(JSON.stringify(a))
 
       axios.post(httpUrl.handleSave, param)
       .then(res => {
         if (res.data.errcode === 0) {
-          console.log('恭喜你，保存成功')
+          this.isShowToast = true
+          this.toastMsg = '恭喜你，保存成功'
+          setTimeout(() => {
+            this.isShowToast = false
+          }, 2000)
         } else {
-          console.log(res.data.errmsg)
+          this.isShowToast = true
+          this.toastMsg = res.data.errmsg
+          setTimeout(() => {
+            this.isShowToast = false
+          }, 2000)
         }
       })
       .catch(err => {
@@ -183,14 +200,13 @@ export default {
       .then(res => {
         if (res.data.errcode === 0) {
           if (res.data.res !== null) {
+            this.wxname = res.data.res.wxname
             let arr = res.data.res.button
-            console.log(res.data.res)
             // 获取数据成功之后，为每一项添加 id
             // 然后判断是否有 sub_button
             // 没有的话添加 sub_button = []
             // 有的话为 sub_button 中每个选项添加 id
             for (let i=0;i<arr.length;i++) {
-              console.log(arr[i])
               arr[i].id = Math.floor(Math.random()*100000)
 
               if (arr[i].sub_button !== undefined) {
@@ -202,9 +218,40 @@ export default {
               }
             }
             this.navList = arr
+            // 获取数据后，判断 navList 里面有没有值
+            // 有的话 默认把第一项显示到 Info 组件
+            // 没有的话 把空白显示到 Info 组件
+            if (this.navList.length !== 0) {
+              this.isShowInfo = 1
+              this.itemObj = this.navList[0]
+              this.infoTabId = this.navList[0].id
+              if (this.navList[0].sub_button.length === 0) {
+                this.isHasSubList = false
+              } else {
+                this.isHasSubList = true
+              }
+              // 默认显示子菜单
+              this.isShowSubTab = true
+              this.subTabs = this.navList[0].sub_button
+              this.tabId = this.navList[0].id
+              this.nowIndex = 0,
+              this.movePanel = 'item1'
+            } else {
+              this.isShowInfo = 0
+            }
+          } else {
+            this.isShowToast = true
+            this.toastMsg = '没有数据'
+            setTimeout(() => {
+              this.isShowToast = false
+            }, 2000)
           }
         } else {
-          console.log(res.data.errmsg)
+          this.isShowToast = true
+          this.toastMsg = res.data.errmsg
+          setTimeout(() => {
+            this.isShowToast = false
+          }, 2000)
         }
       })
       .catch(err => console.log(err))
@@ -226,6 +273,11 @@ export default {
           this.navList.splice(i, 1)
         }
       }
+      this.isShowToast = true
+      this.toastMsg = '删除成功'
+      setTimeout(() => {
+        this.isShowToast = false
+      }, 2000)
       this.isShowInfo = 0
       this.isShowSubTab = false
     },
@@ -239,6 +291,11 @@ export default {
           }
         }
       }
+      this.isShowToast = true
+      this.toastMsg = '删除成功'
+      setTimeout(() => {
+        this.isShowToast = false
+      }, 2000)
       this.isShowInfo = 0
     },
     showSubInfo (val) {
@@ -287,21 +344,6 @@ export default {
   width: 80px;
   margin-left: 217px;
 }
-.container {
-  padding: 20px;
-  display: flex;
-}
-.wrap {
-  border: 1px solid #ddd;
-  padding-bottom: 20px;
-}
-.wrap-header {
-  color: #333;
-  background-color: #f5f5f5;
-  border-color: #ddd;
-  padding: 10px 15px;
-  border-bottom: 1px solid #ddd;
-}
 .info {
   padding: 10px 20px;
   width: 100%;
@@ -313,13 +355,12 @@ export default {
   flex-basis: 300px;
   flex-shrink: 0;
   background-color: #fafafa;
-  border: 1px solid #e3e3e3;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   margin-right: 10px;
 }
-.header {
+.segment > .header {
   height: 60px;
   background-color: #303030;
   color: #ffffff;
@@ -327,26 +368,41 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.navbar {
+.segment > .header > h3 {
+  margin: 0;
+  font-weight: normal;
+  font-size: 20px;
+}
+.segment > .content {
+  border-left: 1px solid #e3e3e3;
+  border-right: 1px solid #e3e3e3;
+}
+.segment > .content {
+  flex-grow: 2;
+  padding: 10px;
+}
+.segment > .navbar {
   width: 100%;
   height: 60px;
-  border-top: 1px solid #e3e3e3;
+  border: 1px solid #e3e3e3;
   background-color: #fafafa;
   display: flex;
   align-items: stretch;
   position: relative;
+  margin-bottom: 0;
+  border-radius: 0;
 }
-.navbar > .icon-keyboard {
+.segment > .navbar > .icon-keyboard {
   width: 50px;
   height: 100%;
   padding: 15px 10px;
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
 }
-.navbar > .icon-keyboard > img {
+.segment > .navbar > .icon-keyboard > img {
   width: 100%;
 }
-.navbar > .item {
+.segment > .navbar > .item {
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
   flex: 1;
@@ -355,22 +411,33 @@ export default {
   align-items: center;
   position: relative;
 }
-.navbar > .icon-plus {
+.segment > .navbar > .item:last-child {
   border-right: none;
 }
-.navbar > .item a {
+.segment > .navbar > .icon-plus {
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.segment > .navbar > .item a {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.navbar > .icon-plus a > img {
-  width: 29px;
+.segment > .navbar > .icon-plus a {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.content {
-  flex-grow: 2;
-  padding: 10px;
+.segment > .navbar > .icon-plus a > img {
+  width: 29px;
 }
 .subTab {
   position: absolute;

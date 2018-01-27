@@ -4,7 +4,7 @@
     <div v-if="isShow === 1">
       <div class="pageTitle">
         <h1>{{ itemObj.name }}</h1>
-        <a @click="handleDeleteItem" href="javascript:;">删除菜单</a>
+        <a @click="handleDeleteItem">删除菜单</a>
       </div>
       <p v-if="isHasSubList" class="tip1">已添加子菜单，仅可设置菜单名称</p>
       <div class="form-item">
@@ -25,9 +25,8 @@
     <div v-if="isShow === 2">
       <div class="pageTitle">
         <h1>{{ itemObj.name }}</h1>
-        <a @click="handleDeleteSubItem" href="javascript:;">删除子菜单</a>
+        <a @click="handleDeleteSubItem">删除子菜单</a>
       </div>
-      <p v-if="isHasSubList" class="tip1">已添加子菜单，仅可设置菜单名称</p>
 
       <div class="form-item">
         <h2>子菜单名称</h2>
@@ -43,9 +42,7 @@
     </div>
 
     <!-- 欢迎页 -->
-    <div v-if="isShow === 0">
-      <h1 style="font-size: 50px;">Welcome</h1>
-    </div>
+    <div v-if="isShow === 0"></div>
   </div>
 </template>
 
@@ -102,8 +99,6 @@ export default {
       this.$emit('handleDeleteItem', this.itemObj.id)
     },
     handleDeleteSubItem () {
-      // console.log('要删除的tabId：'+this.tabId)
-      // console.log('要删除的subId：'+this.subId)
       let data = {
         tabId: this.tabId,
         subId: this.subId
@@ -138,7 +133,7 @@ export default {
 }
 .pageTitle > h1 {
   font-size: 20px;
-  padding: 10px 0;
+  margin: 0;
 }
 .pageTitle > a {
   padding: 13px 0;
@@ -159,10 +154,11 @@ export default {
 .form-item > h2 {
   margin-right: 15px;
   margin-top: 9px;
+  font-size: 16px;
 }
 .form-item input {
   height: 38px;
-  width: 250px;
+  width: 600px;
   padding-left: 10px;
   border-radius: 3px;
   /* border: none; */

@@ -20,7 +20,8 @@ Mock.mock(/getBrandMenuJson/, {
         'url': 'www.soso.com',
         'type': 'view'
       }
-    ]
+    ],
+    'wxname': '青春版品质 Test'
   }
 })
 
