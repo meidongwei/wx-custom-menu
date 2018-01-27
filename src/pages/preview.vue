@@ -178,7 +178,7 @@ export default {
       .then(res => {
         if (res.data.errcode === 0) {
           this.isShowToast = true
-          this.toastMsg = '恭喜你，保存成功'
+          this.toastMsg = '保存成功'
           setTimeout(() => {
             this.isShowToast = false
           }, 2000)

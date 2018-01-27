@@ -27,7 +27,7 @@ export default {
 .toast-wrap {
   width: 100%;
   height: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
   display: flex;
   justify-content: center;
