@@ -18,6 +18,7 @@ export default {
 a, a:hover {
   text-decoration: none;
   cursor: pointer;
+  color: #666666;
 }
 /* 激活状态 */
 .active a {

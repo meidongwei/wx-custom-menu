@@ -77,12 +77,12 @@ export default {
 <style scoped>
 .segment {
   margin-right: 30px;
-  margin-top: 30px;
   border: 1px solid #e3e3e3;
-  width: 100%;
+  width: 85px;
 }
 .segment > .item {
   width: 100%;
+  height: 47px;
   border-bottom: 1px solid #e3e3e3;
   display: flex;
   justify-content: center;
@@ -93,12 +93,14 @@ export default {
 }
 .segment > .item > div {
   width: 100%;
+  height: 100%;
 }
 .segment > .item a {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
+  height: 100%;
   padding: 10px 0;
 }
 .segment > .add > a > img {

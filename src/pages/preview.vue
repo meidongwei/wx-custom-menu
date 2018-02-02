@@ -1,11 +1,11 @@
 <template>
-  <div class="panel panel-default" style="border:0;border-radius:0;box-shadow:none;">
+  <div class="panel panel-default" style="width:1103px;border:0;border-radius:0;box-shadow:none;">
     <div class="panel-heading">
       <h3 class="panel-title">
         自定义菜单设置
       </h3>
     </div>
-    <div class="panel-body" style="display:flex;padding-right:15px;">
+    <div class="panel-body" style="display:flex;">
       <div class="segment">
         <div class="header">
           <h3>{{ wxname }}</h3>
@@ -34,10 +34,13 @@
       <div class="info">
         <Info :isShow="isShowInfo" :tabId="infoTabId" :subId="subId"
           :itemObj="itemObj" :isHasSubList="isHasSubList"
+          :isShowTab="isShowTab" :isHasMsg="isHasMsg"
           @handleUpdateData="handleUpdateData"
           @handleDeleteItem="handleDeleteItem"
           @handleUpdateSubData="handleUpdateSubData"
-          @handleDeleteSubItem="handleDeleteSubItem"></Info>
+          @handleDeleteSubItem="handleDeleteSubItem"
+          @changeTab="changeTab"
+          @handleChooseMsg="handleChooseMsg"></Info>
       </div>
     </div>
     <div class="box">
@@ -72,6 +75,8 @@ export default {
 
       isShowInfo: 0, // 是否显示 Info 组件('1':主菜单 | '2':子菜单 | '0':欢迎页)
       itemObj: null, // Info 组件的对象
+      isShowTab: false, // Info 组件默认显示 发送信息/跳转网址
+      isHasMsg: false,// Info 组件默认显示 发送信息 > plus 按钮/card
 
       isShowSubTab: false, // 是否显示 SubTab 组件
       subTabs: [], // SubTab 组件的列表
@@ -90,6 +95,8 @@ export default {
       // 点击 “增加” 按钮时，显示 Info 组件，隐藏 SubTab 组件
       this.isShowInfo = 1
       this.isShowSubTab = false
+      this.isShowTab = true
+      this.isHasMsg = false
 
       let item = {
         name: '菜单',
@@ -98,6 +105,8 @@ export default {
         sub_button: [],
         type: 'view'
       }
+      // 新建的时候把 id 传给 Info
+      this.infoTabId = item.id
       this.isHasSubList = false
 
       if (this.navList.length < 3) {
@@ -108,18 +117,30 @@ export default {
     handleUpdateItem (index) {
       // 显示 Info 组件（主菜单信息）
       this.isShowInfo = 1
+      // Info 组件默认显示 发送消息 or 跳转网址
+      let list = this.navList[index].item
+      if (list !== undefined && list !== null && list !== []) {
+        this.isShowTab = false
+        this.isHasMsg = true
+      } else {
+        this.isShowTab = true
+        this.isHasMsg = false
+      }
+
       let item = {
         name: this.navList[index].name,
         url: this.navList[index].url,
         id: this.navList[index].id,
         sub_button: this.navList[index].sub_button,
-        type: this.navList[index].type
+        type: this.navList[index].type,
+        item: this.navList[index].item
       }
       this.itemObj = item
 
       // 显示 SubTab 组件
       // 传 tabId 给 SubTab 组件
       // 传 tabId 给 Info 组件
+      // 传 tabId 给 Modal 组件
       this.subTabs = item.sub_button
       this.tabId = this.navList[index].id
       this.infoTabId = this.navList[index].id
@@ -217,6 +238,7 @@ export default {
                 arr[i].sub_button = []
               }
             }
+
             this.navList = arr
             // 获取数据后，判断 navList 里面有没有值
             // 有的话 默认把第一项显示到 Info 组件
@@ -225,6 +247,12 @@ export default {
               this.isShowInfo = 1
               this.itemObj = this.navList[0]
               this.infoTabId = this.navList[0].id
+              if (this.navList[0].url !== undefined) {
+                this.isShowTab = true
+              } else {
+                this.isShowTab = false
+                this.isHasMsg = true
+              }
               if (this.navList[0].sub_button.length === 0) {
                 this.isHasSubList = false
               } else {
@@ -323,6 +351,24 @@ export default {
           }
         }
       }
+    },
+    changeTab (val) {
+      this.isShowTab = val
+    },
+    handleChooseMsg (val) {
+      for (let i=0;i<this.navList.length;i++) {
+        if (this.navList[i].id === val.tabId) {
+          this.navList[i].item = []
+          this.navList[i].item[0] = val.messageObj
+          this.itemObj = this.navList[i]
+
+          // 显示 Info 组件（主菜单信息）
+          this.isShowInfo = 1
+          // Info 组件默认显示 发送消息 or 跳转网址
+          this.isShowTab = false
+          this.isHasMsg = true
+        }
+      }
     }
   },
   created () {
@@ -338,27 +384,31 @@ export default {
 }
 .item2 {
   width: 80px;
-  margin-left: 134px;
+  margin-left: 131px;
 }
 .item3 {
   width: 80px;
-  margin-left: 217px;
+  margin-left: 213px;
 }
 .info {
-  padding: 10px 20px;
-  width: 100%;
+  box-sizing: border-box;
+  /* padding: 10px 20px; */
+  width:777px;
   flex-shrink: 1;
-  background-color: #f8f8f8;
+  background-color: #f4f5f9;
+  border: 1px solid #d2d2d2;
 }
 .segment {
-  height: 590px;
+  box-sizing: border-box;
+  height: 581px;
+  width: 94px;
   flex-basis: 300px;
   flex-shrink: 0;
   background-color: #fafafa;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-right: 10px;
+  margin-right: 15px;
 }
 .segment > .header {
   height: 60px;
@@ -383,7 +433,7 @@ export default {
 }
 .segment > .navbar {
   width: 100%;
-  height: 60px;
+  height: 50px;
   border: 1px solid #e3e3e3;
   background-color: #fafafa;
   display: flex;
@@ -395,7 +445,7 @@ export default {
 .segment > .navbar > .icon-keyboard {
   width: 50px;
   height: 100%;
-  padding: 15px 10px;
+  padding: 10px;
   box-sizing: border-box;
   border-right: 1px solid #e3e3e3;
 }
@@ -441,6 +491,6 @@ export default {
 }
 .subTab {
   position: absolute;
-  bottom: 65px;
+  bottom: 55px;
 }
 </style>
