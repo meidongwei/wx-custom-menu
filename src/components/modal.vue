@@ -18,7 +18,7 @@
 
           </div>
 
-          <button class="btn m-btn btn-block">点击加载</button>
+          <!-- <button class="btn m-btn btn-block">点击加载</button> -->
         </div>
         <div class="modal-footer">
           <button @click="handleCloseModal" type="button" class="btn btn-default">取消</button>
@@ -49,6 +49,14 @@ export default {
     tabId: {
       type: Number,
       default: 0
+    },
+    subId: {
+      type: Number,
+      default: 0
+    },
+    flag: {
+      type: Number,
+      default: 0
     }
   },
   data () {
@@ -66,12 +74,25 @@ export default {
     },
     // 选择好之后，点确定发送信息
     handleChooseMsg () {
-      let obj = {
-        tabId: this.tabId,
-        messageObj: this.messageList[this.nowIndex]
+      if (this.flag === 2) {
+        // 子菜单
+        let obj = {
+          tabId: this.tabId,
+          subId: this.subId,
+          messageObj: this.messageList[this.nowIndex]
+        }
+        this.$emit('handleChooseSubMsg', obj)
+        this.handleCloseModal()
+      } else {
+        // 主菜单
+        let obj = {
+          tabId: this.tabId,
+          messageObj: this.messageList[this.nowIndex]
+        }
+        this.$emit('handleChooseMsg', obj)
+        this.handleCloseModal()
       }
-      this.$emit('handleChooseMsg', obj)
-      this.handleCloseModal()
+
     }
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <div class="panel panel-default" style="width:1103px;border:0;border-radius:0;box-shadow:none;">
+  <div class="panel panel-default" style="border:0;border-radius:0;box-shadow:none;">
     <div class="panel-heading">
       <h3 class="panel-title">
         自定义菜单设置
       </h3>
     </div>
-    <div class="panel-body" style="display:flex;">
+    <div class="panel-body" style="display:flex;padding-right:15px;">
       <div class="segment">
         <div class="header">
           <h3>{{ wxname }}</h3>
@@ -27,20 +27,22 @@
           </div>
           <SubTab :isShow="isShowSubTab" class="subTab"
             :subTabs="subTabs" :tabId="tabId" :class="movePanel"
-            @showSubInfo="showSubInfo"></SubTab>
+            @handleAddSubItem="handleAddSubItem"
+            @handleUpdateSubItem="handleUpdateSubItem"></SubTab>
         </div>
         <!-- navbar end -->
       </div>
       <div class="info">
         <Info :isShow="isShowInfo" :tabId="infoTabId" :subId="subId"
           :itemObj="itemObj" :isHasSubList="isHasSubList"
-          :isShowTab="isShowTab" :isHasMsg="isHasMsg"
-          @handleUpdateData="handleUpdateData"
+          :isShowTab="isShowTab" :isHasMsg="isHasMsg" :cardItem="cardItem"
+          @handleUpdateData="handleUpdateData" :messageList="messageList"
           @handleDeleteItem="handleDeleteItem"
           @handleUpdateSubData="handleUpdateSubData"
           @handleDeleteSubItem="handleDeleteSubItem"
-          @changeTab="changeTab"
-          @handleChooseMsg="handleChooseMsg"></Info>
+          @changeTab="changeTab" @changeSubTab="changeSubTab"
+          @handleChooseMsg="handleChooseMsg"
+          @handleChooseSubMsg="handleChooseSubMsg"></Info>
       </div>
     </div>
     <div class="box">
@@ -68,6 +70,9 @@ export default {
   data () {
     return {
       navList: [],
+      brandMaterialList: [],
+      cardItem: null,
+      messageList: [],
       wxname: '',
 
       toastMsg: '123',
@@ -86,7 +91,7 @@ export default {
       infoTabId: 0, // 用于传入 Info 组件
 
       isHasSubList: false, // 是否有 subList（用于 Info 组件）
-      nowIndex: '', // 当前选项（用于样式选中 active）
+      nowIndex: 0, // 当前选项（用于样式选中 active）
       movePanel: '' // 用于样式切换：item1, item2, item3
     }
   },
@@ -113,13 +118,14 @@ export default {
         this.navList.push(item)
         this.itemObj = item
       }
+      // 选中样式
+      this.nowIndex = this.navList.length - 1
     },
     handleUpdateItem (index) {
       // 显示 Info 组件（主菜单信息）
       this.isShowInfo = 1
       // Info 组件默认显示 发送消息 or 跳转网址
-      let list = this.navList[index].item
-      if (list !== undefined && list !== null && list !== []) {
+      if (this.navList[index].type === 'media_id') {
         this.isShowTab = false
         this.isHasMsg = true
       } else {
@@ -127,21 +133,19 @@ export default {
         this.isHasMsg = false
       }
 
-      let item = {
-        name: this.navList[index].name,
-        url: this.navList[index].url,
-        id: this.navList[index].id,
-        sub_button: this.navList[index].sub_button,
-        type: this.navList[index].type,
-        item: this.navList[index].item
+      for (let i=0;i<this.brandMaterialList.length;i++) {
+        if (this.brandMaterialList[i].media_id === this.navList[index].media_id) {
+          // Card 组件需要的
+          this.cardItem = this.brandMaterialList[i]
+        }
       }
-      this.itemObj = item
+
+      this.itemObj = this.navList[index]
 
       // 显示 SubTab 组件
       // 传 tabId 给 SubTab 组件
       // 传 tabId 给 Info 组件
-      // 传 tabId 给 Modal 组件
-      this.subTabs = item.sub_button
+      this.subTabs = this.navList[index].sub_button
       this.tabId = this.navList[index].id
       this.infoTabId = this.navList[index].id
       this.isShowSubTab = true
@@ -168,20 +172,36 @@ export default {
     },
     handleSave () {
       // 有 sub_button 就没有 url
-      // 有 url 就没有 sub_buttom
+      // 有 url 就没有 sub_button
       // 所以判断 navList 里面每一项是否有 sub_button 或 url
+
+      // 复制数组
       let arr = JSON.parse(JSON.stringify(this.navList))
 
+      // 处理以下数据，把没有的项都删掉
+      // 例如：如果有 sub_button 就删掉 一级 url 和 item
+      // 如果 sub_button 里有 item 就删掉 url
       for (let i=0;i<arr.length;i++) {
         delete arr[i].id
-        if (arr[i].sub_button.length === 0) {
-          delete arr[i].sub_button
-        } else {
-          delete arr[i].url
-          for (let j=0;j<arr[i].sub_button.length;j++) {
-            delete arr[i].sub_button[j].id
+        if (arr[i].sub_button !== undefined) {
+          // 有 sub_button 的情况
+          if (arr[i].sub_button.length === 0) {
+            // 有 sub_button 但为 空 的情况
+            delete arr[i].sub_button
+          } else {
+            // 有 sub_button 且不为 空 的情况
+            arr[i].url = ''
+            delete arr[i].media_id
+            for (let j=0;j<arr[i].sub_button.length;j++) {
+              delete arr[i].sub_button[j].id
+              if (arr[i].sub_button[j].media_id !== undefined) {
+                // sub_button 中有 media_id 就把 url = ''
+                arr[i].sub_button[j].url = ''
+              }
+            }
           }
         }
+
       }
 
       let b = {
@@ -326,9 +346,12 @@ export default {
       }, 2000)
       this.isShowInfo = 0
     },
-    showSubInfo (val) {
-      this.isShowInfo = val.isShowSub
+    handleAddSubItem (val) {
+      this.isShowInfo = 2
       this.itemObj = val.sub
+
+      this.isShowTab = true
+      this.isHasMsg = false
       // 根据 id 把 sub 存入 navList.sub_button
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId && this.navList[i].sub_button.length < 5) {
@@ -337,6 +360,28 @@ export default {
         }
       }
       this.subId = val.sub.id
+    },
+    handleUpdateSubItem (sub) {
+      // 显示 Info 组件（子菜单信息）
+      this.isShowInfo = 2
+      this.itemObj = sub
+      this.subId = sub.id
+
+      for (let i=0;i<this.brandMaterialList.length;i++) {
+        if (this.brandMaterialList[i].media_id === sub.media_id) {
+          // Card 组件需要的
+          this.cardItem = this.brandMaterialList[i]
+        }
+      }
+
+      // Info 组件默认显示 发送消息 or 跳转网址
+      if (sub.media_id !== undefined) {
+        this.isShowTab = false
+        this.isHasMsg = true
+      } else {
+        this.isShowTab = true
+        this.isHasMsg = false
+      }
     },
     handleUpdateSubData (val) {
       this.isShowSubTab = true
@@ -353,14 +398,32 @@ export default {
       }
     },
     changeTab (val) {
-      this.isShowTab = val
+      this.isShowTab = val.isShow
+      for (let i=0;i<this.navList.length;i++) {
+        if (this.navList[i].id === val.tabId) {
+          this.navList[i].type = val.type
+        }
+      }
+    },
+    changeSubTab (val) {
+      this.isShowTab = val.isShow
+      for (let i=0;i<this.navList.length;i++) {
+        if (this.navList[i].id === val.tabId) {
+          for (let j=0;j<this.navList[i].sub_button.length;j++) {
+            if (this.navList[i].sub_button[j].id === val.subId) {
+              this.navList[i].sub_button[j].type = val.type
+            }
+          }
+        }
+      }
     },
     handleChooseMsg (val) {
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId) {
-          this.navList[i].item = []
-          this.navList[i].item[0] = val.messageObj
+          this.navList[i].media_id = val.messageObj.media_id
+
           this.itemObj = this.navList[i]
+          this.cardItem = val.messageObj
 
           // 显示 Info 组件（主菜单信息）
           this.isShowInfo = 1
@@ -369,10 +432,58 @@ export default {
           this.isHasMsg = true
         }
       }
+    },
+    handleChooseSubMsg (val) {
+      for (let i=0;i<this.navList.length;i++) {
+        if (this.navList[i].id === val.tabId) {
+          for (let j=0;j<this.navList[i].sub_button.length;j++) {
+            if (this.navList[i].sub_button[j].id === val.subId) {
+              this.navList[i].sub_button[j].media_id = val.messageObj.media_id
+
+              this.itemObj = this.navList[i].sub_button[j]
+              this.cardItem = val.messageObj
+
+              // 显示 Info 组件（主菜单信息）
+              this.isShowInfo = 2
+              // Info 组件默认显示 发送消息 or 跳转网址
+              this.isShowTab = false
+              this.isHasMsg = true
+            }
+          }
+        }
+      }
+    },
+    getBrandMaterialList () {
+      let a = {}
+      a.pageNo = 1
+      a.pageSize = 20
+      a.type = "news"
+
+      let param = new URLSearchParams()
+      param.append("bizContent", JSON.stringify(a))
+
+      axios.post(httpUrl.getBrandMaterialList, param)
+        .then(res => {
+          if (res.data.errcode === 0) {
+            this.brandMaterialList = res.data.res
+            this.messageList = this.brandMaterialList
+          } else {
+            this.brandMaterialList = []
+            this.messageList = this.brandMaterialList
+
+            this.isShowToast = true
+            this.toastMsg = res.data.errmsg
+            setTimeout(() => {
+              this.isShowToast = false
+            }, 2000)
+          }
+        })
+        .catch(err => console.log(err))
     }
   },
   created () {
     this.getDatas()
+    this.getBrandMaterialList()
   }
 }
 </script>
@@ -393,7 +504,7 @@ export default {
 .info {
   box-sizing: border-box;
   /* padding: 10px 20px; */
-  width:777px;
+  width: 100%;
   flex-shrink: 1;
   background-color: #f4f5f9;
   border: 1px solid #d2d2d2;

@@ -41,8 +41,8 @@
               <img src="../assets/plus.png" alt="plus-add">
             </a>
             <div class="row">
-              <div class="col-md-4">
-                <Card v-if="isHasMsg" :cardItem="itemObj.item[0]"
+              <div class="col-md-12">
+                <Card v-if="isHasMsg" :cardItem="cardItem"
                   @click.native="handleAddPicText" class="cardHover"></Card>
               </div>
             </div>
@@ -66,10 +66,43 @@
           <p class="tip2">字数不超过8个汉字或16个字母</p>
         </div>
       </div>
-      <div class="form-item">
-        <h2>子页面地址</h2>
-        <input v-model="itemObj.url" @blur="handleUpdateSubData" type="text">
+
+      <div class="form-item-tab">
+        <div class="form-item-header">
+          <h2>子菜单内容</h2>
+          <div class="item-input">
+            <input @click="isShowSubSendMsg" id="r3" type="radio" name="r3" :checked="!isShowTab">
+            <label for="r3">图文消息</label>
+          </div>
+          <div class="item-input">
+            <input @click="isShowSubGoPage" id="r4" type="radio" name="r3" :checked="isShowTab">
+            <label for="r4">跳转网页</label>
+          </div>
+        </div>
+        <div v-if="isShowTab" class="form-item-body">
+          <p>订阅者点击该菜单会跳转到以下链接</p>
+          <div class="body-con">
+            <h2>页面地址</h2>
+            <input v-model="itemObj.url" @blur="handleUpdateSubData" type="text">
+          </div>
+        </div>
+
+        <div v-if="!isShowTab" class="form-item-body">
+          <div class="body-con">
+            <a v-if="!isHasMsg" @click="handleAddPicText">
+              <img src="../assets/plus.png" alt="plus-add">
+            </a>
+            <div class="row">
+              <div class="col-md-12">
+                <Card v-if="isHasMsg" :cardItem="cardItem"
+                  @click.native="handleAddPicText" class="cardHover"></Card>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
+
     </div>
 
     <!-- 欢迎页 -->
@@ -80,7 +113,8 @@
       :isShowModal="isShowModal"
       :messageList="messageList"
       @handleChooseMsg="handleChooseMsg"
-      :tabId="tabId"></Modal>
+      @handleChooseSubMsg="handleChooseSubMsg"
+      :tabId="tabId" :flag="isShow" :subId="subId"></Modal>
 
   </div>
 </template>
@@ -123,14 +157,23 @@ export default {
     isHasMsg: {
       type: Boolean,
       default: false
+    },
+    cardItem: {
+      type: Object,
+      default: null
+    },
+    messageList: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   data () {
     return {
       name: '',
       url: '',
-      isShowModal: false,
-      messageList: []
+      isShowModal: false
     }
   },
   methods: {
@@ -138,16 +181,8 @@ export default {
       let item = {
         name: this.itemObj.name,
         id: this.itemObj.id,
-        sub_button: this.itemObj.sub_button,
-        type: this.itemObj.type
-      }
-      // 判断当前是 发送信息 还是 跳转网址
-      if (this.isShowTab) {
-        // goPage
-        item.url = this.itemObj.url
-      } else {
-        // sendMsg
-        item.message = this.itemObj.message
+        type: this.itemObj.type,
+        url: this.itemObj.url
       }
       this.$emit('handleUpdateData', item)
     },
@@ -163,26 +198,26 @@ export default {
     },
     // 发送信息/跳转网页切换
     isShowSendMsg () {
-      let val = false
+      let val = {
+        isShow: false,
+        tabId: this.tabId,
+        type: 'media_id'
+      }
       this.$emit('changeTab', val)
     },
     isShowGoPage () {
-      let val = true
+      let val = {
+        isShow: true,
+        tabId: this.tabId,
+        type: 'view'
+      }
       this.$emit('changeTab', val)
     },
     handleAddPicText () {
+      // if (this.isShow === 2) {
+      //   this.subId = this.itemObj.id
+      // }
       this.isShowModal = true
-      axios.get(HttpUrl.getPicTextList)
-      .then(res => {
-        if (res.data.errcode === 0) {
-          // console.log(res.data.res.item)
-          this.messageList = res.data.res.item
-          // console.log(this.messageList)
-        } else {
-          console.log(res.data.errmsg)
-        }
-      })
-      .catch(err => console.log(err))
     },
     handleCloseModal () {
       this.isShowModal = false
@@ -203,6 +238,28 @@ export default {
         sub: sub
       }
       this.$emit('handleUpdateSubData', data)
+    },
+    // 发送信息/跳转网页切换
+    isShowSubSendMsg () {
+      let val = {
+        isShow: false,
+        tabId: this.tabId,
+        subId: this.subId,
+        type: 'media_id'
+      }
+      this.$emit('changeSubTab', val)
+    },
+    isShowSubGoPage () {
+      let val = {
+        isShow: true,
+        tabId: this.tabId,
+        subId: this.subId,
+        type: 'view'
+      }
+      this.$emit('changeSubTab', val)
+    },
+    handleChooseSubMsg (obj) {
+      this.$emit('handleChooseSubMsg', obj)
     }
   }
 }
@@ -294,9 +351,6 @@ export default {
   margin: 15px 20px 15px 0;
 }
 .form-item-body > .body-con {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   padding: 20px 0 20px 20px;
 }
 .form-item-body .body-con img {
@@ -305,6 +359,7 @@ export default {
 }
 .cardHover {
   margin: 0;
+  max-width: 269px;
 }
 .cardHover:hover {
   box-shadow: 0 0 10px #d6d6d6;

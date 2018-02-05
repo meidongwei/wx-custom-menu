@@ -36,8 +36,7 @@ export default {
   },
   data () {
     return {
-      isShowSub: 2,
-      nowIndex: ''
+      nowIndex: 0
     }
   },
   methods: {
@@ -50,25 +49,15 @@ export default {
       }
 
       let data = {
-        isShowSub: this.isShowSub,
         sub: sub,
         tabId: this.tabId
       }
-      this.$emit('showSubInfo', data)
+      this.$emit('handleAddSubItem', data)
+      this.nowIndex = this.subTabs.length - 1
     },
     handleUpdateSubItem (index) {
       this.nowIndex = index
-      let sub = {
-        name: this.subTabs[index].name,
-        url: this.subTabs[index].url,
-        id: this.subTabs[index].id,
-        type: this.subTabs[index].type
-      }
-      let data = {
-        isShowSub: this.isShowSub,
-        sub: sub
-      }
-      this.$emit('showSubInfo', data)
+      this.$emit('handleUpdateSubItem', this.subTabs[index])
     }
   }
 }

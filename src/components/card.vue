@@ -2,20 +2,20 @@
   <div class="panel panel-default">
     <div class="panel-body m-panel-body">
       <div class="message1">
-        <img src="../assets/pic1.jpg" alt="pic">
+        <img :src="picSrc1" alt="pic">
         <div>
-          <p>{{ cardItem.content.new_item[0].title }}</p>
+          <p>{{ title1 }}</p>
         </div>
       </div>
-      <div class="message2">
+      <div class="message2" v-if="cardItem.content.news_item[1] !== undefined">
         <div class="message2-text">
-          <p>{{ cardItem.content.new_item[1].title }}</p>
+          <p>{{ title2 }}</p>
         </div>
         <div class="message2-pic">
-          <img src="../assets/pic1.jpg" alt="pic">
+          <img :src="picSrc2" alt="pic">
         </div>
       </div>
-      <div class="update">更新于 {{ cardItem.content.update_time }}</div>
+      <div class="update">更新于 {{ this.update_time1 }}</div>
     </div>
   </div>
 </template>
@@ -27,6 +27,37 @@ export default {
       type: Object,
       defautl: null
     }
+  },
+  computed: {
+    picSrc1 () {
+      return this.cardItem.content.news_item[0].thumb_url
+    },
+    picSrc2 () {
+      return this.cardItem.content.news_item[1].thumb_url
+    },
+    update_time1 () {
+      return new Date(parseInt(this.cardItem.content.update_time) * 1000)
+        .toLocaleString('chinese',{hour12:false}).replace(/:\d{1,2}$/,' ')
+    },
+    title1 () {
+      let str = this.cardItem.content.news_item[0].title
+      if (str.length < 14) {
+        return str
+      } else {
+        str = str.substr(0,14) + '...'
+        return str
+      }
+    },
+    title2 () {
+      let str = this.cardItem.content.news_item[1].title
+      if (str.length < 27) {
+        return str
+      } else {
+        str = str.substr(0,27) + '...'
+        return str
+      }
+
+    }
   }
 }
 </script>
@@ -34,12 +65,15 @@ export default {
 <style scoped>
 .m-panel-body {
   padding: 0;
+  min-width: 267px;
 }
 .m-panel-body > .message1 {
   position: relative;
+  min-width: 267px;
 }
 .m-panel-body > .message1 > img {
   width: 100%;
+  height: 151px;
   border-top-left-radius: 3px;
   border-top-right-radius: 3px;
 }
