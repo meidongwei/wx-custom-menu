@@ -1,11 +1,11 @@
 <template>
   <div>
     <div v-if="isShow" class="segment">
-      <div v-for="(sub, index) in subTabs" :key="index" class="item">
-        <div @click="handleUpdateSubItem(index)"
-          :class="{ 'active': nowIndex === index }">
+      <div v-for="(sub, index) in subTabs" :key="index" class="item" @click="handleUpdateSubItem(index)"
+        :class="{ 'active': nowIndex === index }">
+        <!-- <div> -->
           <a>{{ sub.name }}</a>
-        </div>
+        <!-- </div> -->
       </div>
       <div v-if="this.subTabs.length < 5" class="item add">
         <a @click="handleAddSubItem">
@@ -56,6 +56,7 @@ export default {
       this.nowIndex = this.subTabs.length - 1
     },
     handleUpdateSubItem (index) {
+      console.log(this.subTabs[index])
       this.nowIndex = index
       this.$emit('handleUpdateSubItem', this.subTabs[index])
     }
@@ -66,19 +67,22 @@ export default {
 <style scoped>
 .segment {
   margin-right: 30px;
-  border: 1px solid #e3e3e3;
   width: 85px;
 }
 .segment > .item {
   width: 100%;
   height: 47px;
-  border-bottom: 1px solid #e3e3e3;
+  /* border-top: 1px solid #e3e3e3;
+  border-left: 1px solid #e3e3e3;
+  border-right: 1px solid #e3e3e3; */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .segment > .add {
-  border-bottom: none;
+  /* border: 1px solid #e3e3e3; */
+  /* border-top: none; */
+  /* border-bottom: 1px solid #e3e3e3; */
 }
 .segment > .item > div {
   width: 100%;
@@ -91,6 +95,11 @@ export default {
   width: 100%;
   height: 100%;
   padding: 10px 0;
+  border: 1px solid #e3e3e3;
+  border-bottom: none;
+}
+.segment > .item:last-child {
+  border-bottom: 1px solid #e3e3e3;
 }
 .segment > .add > a > img {
   width: 29px;

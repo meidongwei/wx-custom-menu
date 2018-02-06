@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShowModal" class="m-modal-wrap">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="margin: 180px 0;">
       <div class="modal-content modal-lg">
         <div class="modal-header">
           <button @click="handleCloseModal" type="button" class="close">
@@ -11,9 +11,23 @@
         <div class="modal-body" style="max-height:500px;overflow-y:scroll;">
           <div class="row">
 
-            <div v-for="(item, index) in messageList" class="col-md-4"
-              @click="handleSelectMsg(index)" :class="{ 'msgActive': nowIndex === index }">
-              <Card :cardItem="item"></Card>
+            <div class="col-md-4">
+              <div v-for="(item, index) in messageList" v-if="index % 3 === 0"
+                @click="handleSelectMsg(index)" :class="{ 'msgActive': nowIndex === index }">
+                <Card :cardItem="item"></Card>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div v-for="(item, index) in messageList" v-if="index % 3 === 1"
+                @click="handleSelectMsg(index)" :class="{ 'msgActive': nowIndex === index }">
+                <Card :cardItem="item"></Card>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div v-for="(item, index) in messageList" v-if="index % 3 === 2"
+                @click="handleSelectMsg(index)" :class="{ 'msgActive': nowIndex === index }">
+                <Card :cardItem="item"></Card>
+              </div>
             </div>
 
           </div>
@@ -64,6 +78,13 @@ export default {
       nowIndex: 0
     }
   },
+  conputed: {
+    list1 () {
+      for (let i=0;i<this.messageList.length;i++) {
+        this.messageList.length
+      }
+    }
+  },
   methods: {
     handleCloseModal () {
       this.$emit('handleCloseModal')
@@ -100,12 +121,12 @@ export default {
 
 <style scoped>
 .m-modal-wrap {
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   background-color: rgba(0, 0, 0, .8);
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
 }

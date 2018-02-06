@@ -35,7 +35,7 @@
       <div class="info">
         <Info :isShow="isShowInfo" :tabId="infoTabId" :subId="subId"
           :itemObj="itemObj" :isHasSubList="isHasSubList"
-          :isShowTab="isShowTab" :isHasMsg="isHasMsg" :cardItem="cardItem"
+          :isHasMsg="isHasMsg" :cardItem="cardItem"
           @handleUpdateData="handleUpdateData" :messageList="messageList"
           @handleDeleteItem="handleDeleteItem"
           @handleUpdateSubData="handleUpdateSubData"
@@ -80,7 +80,6 @@ export default {
 
       isShowInfo: 0, // 是否显示 Info 组件('1':主菜单 | '2':子菜单 | '0':欢迎页)
       itemObj: null, // Info 组件的对象
-      isShowTab: false, // Info 组件默认显示 发送信息/跳转网址
       isHasMsg: false,// Info 组件默认显示 发送信息 > plus 按钮/card
 
       isShowSubTab: false, // 是否显示 SubTab 组件
@@ -100,7 +99,6 @@ export default {
       // 点击 “增加” 按钮时，显示 Info 组件，隐藏 SubTab 组件
       this.isShowInfo = 1
       this.isShowSubTab = false
-      this.isShowTab = true
       this.isHasMsg = false
 
       let item = {
@@ -124,19 +122,24 @@ export default {
     handleUpdateItem (index) {
       // 显示 Info 组件（主菜单信息）
       this.isShowInfo = 1
-      // Info 组件默认显示 发送消息 or 跳转网址
-      if (this.navList[index].type === 'media_id') {
-        this.isShowTab = false
-        this.isHasMsg = true
-      } else {
-        this.isShowTab = true
-        this.isHasMsg = false
-      }
 
-      for (let i=0;i<this.brandMaterialList.length;i++) {
-        if (this.brandMaterialList[i].media_id === this.navList[index].media_id) {
-          // Card 组件需要的
-          this.cardItem = this.brandMaterialList[i]
+      if (this.navList[index].type !== undefined) {
+        // Info 组件默认显示 发送消息 or 跳转网址
+        if (this.navList[index].type === 'media_id') {
+          this.isHasMsg = true
+
+          if (this.navList[index].media_id !== undefined) {
+            for (let i=0;i<this.brandMaterialList.length;i++) {
+              if (this.brandMaterialList[i].media_id === this.navList[index].media_id) {
+                // Card 组件需要的
+                this.cardItem = this.brandMaterialList[i]
+              }
+            }
+          } else {
+            this.isHasMsg = false
+          }
+        } else {
+          this.isHasMsg = false
         }
       }
 
@@ -150,7 +153,7 @@ export default {
       this.infoTabId = this.navList[index].id
       this.isShowSubTab = true
 
-      // 判断 navList.subList 是否为空
+      // 判断 navList 中 sub_button 是否为空
       // 并把 是否为空 传给 Info 组件
       if (this.navList[index].sub_button === undefined || this.navList[index].sub_button.length === 0) {
         this.isHasSubList = false
@@ -182,25 +185,46 @@ export default {
       // 例如：如果有 sub_button 就删掉 一级 url 和 item
       // 如果 sub_button 里有 item 就删掉 url
       for (let i=0;i<arr.length;i++) {
+        // 去 id
         delete arr[i].id
-        if (arr[i].sub_button !== undefined) {
-          // 有 sub_button 的情况
-          if (arr[i].sub_button.length === 0) {
-            // 有 sub_button 但为 空 的情况
-            delete arr[i].sub_button
-          } else {
-            // 有 sub_button 且不为 空 的情况
-            arr[i].url = ''
-            delete arr[i].media_id
-            for (let j=0;j<arr[i].sub_button.length;j++) {
-              delete arr[i].sub_button[j].id
-              if (arr[i].sub_button[j].media_id !== undefined) {
-                // sub_button 中有 media_id 就把 url = ''
-                arr[i].sub_button[j].url = ''
-              }
+        if (arr[i].sub_button !== undefined && arr[i].sub_button.length !== 0) {
+          delete arr[i].type
+          delete arr[i].url
+          for (let j=0;j<arr[i].sub_button.length;j++) {
+            delete arr[i].sub_button[j].id
+            if (arr[i].sub_button[j].type === 'media_id') {
+              delete arr[i].sub_button[j].url
+            } else {
+              delete arr[i].sub_button[j].media_id
             }
           }
+        } else {
+          delete arr[i].sub_button
         }
+
+        if (arr[i].type === 'media_id') {
+          delete arr[i].url
+        } else {
+          delete arr[i].media_id
+        }
+        // if (arr[i].sub_button !== undefined) {
+        //   // 有 sub_button 的情况
+        //   if (arr[i].sub_button.length === 0) {
+        //     // 有 sub_button 但为 空 的情况
+        //     delete arr[i].sub_button
+        //   } else {
+        //     // 有 sub_button 且不为 空 的情况
+        //     delete arr[i].url
+        //     delete arr[i].media_id
+        //     for (let j=0;j<arr[i].sub_button.length;j++) {
+        //       delete arr[i].sub_button[j].id
+        //       if (arr[i].sub_button[j].media_id !== undefined) {
+        //         // sub_button 中有 media_id 就把 url = ''
+        //         delete arr[i].sub_button[j].url
+        //       }
+        //     }
+        //   }
+        // }
 
       }
 
@@ -267,10 +291,7 @@ export default {
               this.isShowInfo = 1
               this.itemObj = this.navList[0]
               this.infoTabId = this.navList[0].id
-              if (this.navList[0].url !== undefined) {
-                this.isShowTab = true
-              } else {
-                this.isShowTab = false
+              if (this.navList[0].url === undefined) {
                 this.isHasMsg = true
               }
               if (this.navList[0].sub_button.length === 0) {
@@ -321,11 +342,6 @@ export default {
           this.navList.splice(i, 1)
         }
       }
-      this.isShowToast = true
-      this.toastMsg = '删除成功'
-      setTimeout(() => {
-        this.isShowToast = false
-      }, 2000)
       this.isShowInfo = 0
       this.isShowSubTab = false
     },
@@ -337,26 +353,24 @@ export default {
               this.navList[i].sub_button.splice(j, 1)
             }
           }
+          this.navList[i].type = 'view'
         }
       }
-      this.isShowToast = true
-      this.toastMsg = '删除成功'
-      setTimeout(() => {
-        this.isShowToast = false
-      }, 2000)
       this.isShowInfo = 0
     },
     handleAddSubItem (val) {
       this.isShowInfo = 2
       this.itemObj = val.sub
 
-      this.isShowTab = true
       this.isHasMsg = false
       // 根据 id 把 sub 存入 navList.sub_button
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId && this.navList[i].sub_button.length < 5) {
           this.navList[i].sub_button.push(val.sub)
           this.subTabs = this.navList[i].sub_button
+          // delete this.navList[i].media_id
+          // delete this.navList[i].type
+          this.navList[i].url = ''
         }
       }
       this.subId = val.sub.id
@@ -367,19 +381,18 @@ export default {
       this.itemObj = sub
       this.subId = sub.id
 
-      for (let i=0;i<this.brandMaterialList.length;i++) {
-        if (this.brandMaterialList[i].media_id === sub.media_id) {
-          // Card 组件需要的
-          this.cardItem = this.brandMaterialList[i]
-        }
-      }
-
       // Info 组件默认显示 发送消息 or 跳转网址
       if (sub.media_id !== undefined) {
-        this.isShowTab = false
         this.isHasMsg = true
+
+        for (let i=0;i<this.brandMaterialList.length;i++) {
+          if (this.brandMaterialList[i].media_id === sub.media_id) {
+            // Card 组件需要的
+            this.cardItem = this.brandMaterialList[i]
+          }
+        }
+
       } else {
-        this.isShowTab = true
         this.isHasMsg = false
       }
     },
@@ -398,20 +411,20 @@ export default {
       }
     },
     changeTab (val) {
-      this.isShowTab = val.isShow
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId) {
           this.navList[i].type = val.type
+          this.itemObj.type = val.type
         }
       }
     },
     changeSubTab (val) {
-      this.isShowTab = val.isShow
       for (let i=0;i<this.navList.length;i++) {
         if (this.navList[i].id === val.tabId) {
           for (let j=0;j<this.navList[i].sub_button.length;j++) {
             if (this.navList[i].sub_button[j].id === val.subId) {
               this.navList[i].sub_button[j].type = val.type
+              this.itemObj.type = val.type
             }
           }
         }
@@ -428,7 +441,6 @@ export default {
           // 显示 Info 组件（主菜单信息）
           this.isShowInfo = 1
           // Info 组件默认显示 发送消息 or 跳转网址
-          this.isShowTab = false
           this.isHasMsg = true
         }
       }
@@ -446,7 +458,6 @@ export default {
               // 显示 Info 组件（主菜单信息）
               this.isShowInfo = 2
               // Info 组件默认显示 发送消息 or 跳转网址
-              this.isShowTab = false
               this.isHasMsg = true
             }
           }
@@ -482,8 +493,10 @@ export default {
     }
   },
   created () {
-    this.getDatas()
     this.getBrandMaterialList()
+    setTimeout(() => {
+      this.getDatas()
+    }, 1000)
   }
 }
 </script>
@@ -543,6 +556,7 @@ export default {
   padding: 10px;
 }
 .segment > .navbar {
+  box-sizing: border-box;
   width: 100%;
   height: 50px;
   border: 1px solid #e3e3e3;
@@ -564,13 +578,15 @@ export default {
   width: 100%;
 }
 .segment > .navbar > .item {
-  box-sizing: border-box;
-  border-right: 1px solid #e3e3e3;
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
+}
+.segment > .navbar > .item a {
+  box-sizing: border-box;
+  border-right: 1px solid #e3e3e3;
 }
 .segment > .navbar > .item:last-child {
   border-right: none;

@@ -15,15 +15,16 @@ export default {
 </script>
 
 <style>
-a, a:hover {
+a,
+a:hover {
   text-decoration: none;
   cursor: pointer;
   color: #666666;
 }
 /* 激活状态 */
 .active a {
-  color: #428bca;
-  border: 1px solid #428bca;
+  color: #44b549;
+  border: 1px solid #44b549 !important;
   text-decoration: none;
 }
 .box {
