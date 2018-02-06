@@ -52,12 +52,12 @@
 
         <div v-if="itemObj.type === 'media_id'" class="form-item-body">
           <div class="body-con">
-            <a v-if="!isHasMsg" @click="handleAddPicText">
+            <a v-if="itemObj.media_id === undefined" @click="handleAddPicText">
               <img src="../assets/plus.png" alt="plus-add">
             </a>
             <div class="row">
               <div class="col-md-12">
-                <Card v-if="isHasMsg" :cardItem="cardItem"
+                <Card v-if="itemObj.media_id !== undefined" :cardItem="cardItem"
                   @click.native="handleAddPicText" class="cardHover"></Card>
               </div>
             </div>
@@ -113,12 +113,12 @@
 
         <div v-if="itemObj.type === 'media_id'" class="form-item-body">
           <div class="body-con">
-            <a v-if="!isHasMsg" @click="handleAddPicText">
+            <a v-if="itemObj.media_id === undefined" @click="handleAddPicText">
               <img src="../assets/plus.png" alt="plus-add">
             </a>
             <div class="row">
               <div class="col-md-12">
-                <Card v-if="isHasMsg" :cardItem="cardItem"
+                <Card v-if="itemObj.media_id !== undefined" :cardItem="cardItem"
                   @click.native="handleAddPicText" class="cardHover"></Card>
               </div>
             </div>

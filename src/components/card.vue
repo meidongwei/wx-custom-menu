@@ -1,5 +1,5 @@
 <template>
-  <div class="panel panel-default" style="border-width: 1px;">
+  <div class="panel panel-default m-panel-default">
     <div class="panel-body m-panel-body">
 
       <div class="message" :class="{first: item.isFirst }" v-for="item in list1">
@@ -117,5 +117,8 @@ export default {
   margin: 0;
   color: #fff;
   font-size: 16px;
+}
+.m-panel-default {
+  border: 1px solid #ddd;
 }
 </style>
