@@ -545,7 +545,7 @@ export default {
 .segment > .header > h3 {
   margin: 0;
   font-weight: normal;
-  font-size: 20px;
+  font-size: 16px;
 }
 .segment > .content {
   border-left: 1px solid #e3e3e3;

@@ -9,7 +9,7 @@ Vue.config.productionTip = false
 // import Bus from '@/bus'
 // Vue.use(Bus)
 
-// import mock from './mock/mock'
+import mock from './mock/mock'
 
 import './assets/bootstrap/css/bootstrap.min.css'
 
