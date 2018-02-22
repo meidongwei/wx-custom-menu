@@ -32,11 +32,10 @@ export default {
     tabId: {
       type: Number,
       default: 0
-    }
-  },
-  data () {
-    return {
-      nowIndex: 0
+    },
+    nowIndex: {
+      type: Number,
+      default: -1
     }
   },
   methods: {
@@ -48,17 +47,26 @@ export default {
         type: 'view'
       }
 
+      let index
+      if (this.subTabs.length === 0) {
+        index = 0
+      } else {
+        index = this.subTabs.length
+      }
+
       let data = {
         sub: sub,
-        tabId: this.tabId
+        tabId: this.tabId,
+        index: index
       }
       this.$emit('handleAddSubItem', data)
-      this.nowIndex = this.subTabs.length - 1
     },
     handleUpdateSubItem (index) {
-      // console.log(this.subTabs[index])
-      this.nowIndex = index
-      this.$emit('handleUpdateSubItem', this.subTabs[index])
+      let val = {
+        sub: this.subTabs[index],
+        index: index
+      }
+      this.$emit('handleUpdateSubItem', val)
     }
   }
 }

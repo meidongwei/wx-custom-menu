@@ -25,7 +25,7 @@
               <img src="../assets/plus.png">
             </a>
           </div>
-          <SubTab :isShow="isShowSubTab" class="subTab"
+          <SubTab :isShow="isShowSubTab" class="subTab" :nowIndex="subNowIndex"
             :subTabs="subTabs" :tabId="tabId" :class="movePanel"
             @handleAddSubItem="handleAddSubItem"
             @handleUpdateSubItem="handleUpdateSubItem"></SubTab>
@@ -102,7 +102,8 @@ export default {
 
       isShowConfirm: false,
       confirmMsg: '',
-      value: null
+      value: null,
+      subNowIndex: -1
     }
   },
   methods: {
@@ -131,6 +132,7 @@ export default {
       this.nowIndex = this.navList.length - 1
     },
     handleUpdateItem (index) {
+      this.subNowIndex = -1
       // 显示 Info 组件（主菜单信息）
       this.isShowInfo = 1
 
@@ -390,6 +392,8 @@ export default {
       }
     },
     handleAddSubItem (val) {
+      this.subNowIndex = val.index
+      this.nowIndex = -1
       this.isShowInfo = 2
       this.itemObj = val.sub
 
@@ -406,18 +410,20 @@ export default {
       }
       this.subId = val.sub.id
     },
-    handleUpdateSubItem (sub) {
+    handleUpdateSubItem (val) {
+      this.subNowIndex = val.index
+      this.nowIndex = -1
       // 显示 Info 组件（子菜单信息）
       this.isShowInfo = 2
-      this.itemObj = sub
-      this.subId = sub.id
+      this.itemObj = val.sub
+      this.subId = val.sub.id
 
       // Info 组件默认显示 发送消息 or 跳转网址
-      if (sub.media_id !== undefined) {
+      if (val.sub.media_id !== undefined) {
         this.isHasMsg = true
 
         for (let i=0;i<this.brandMaterialList.length;i++) {
-          if (this.brandMaterialList[i].media_id === sub.media_id) {
+          if (this.brandMaterialList[i].media_id === val.sub.media_id) {
             // Card 组件需要的
             this.cardItem = this.brandMaterialList[i]
           }
