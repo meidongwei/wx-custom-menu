@@ -51,6 +51,11 @@
     <!-- toast -->
     <Toast :isShowToast="isShowToast" :toastMsg="toastMsg"></Toast>
     <!-- toast end -->
+    <!-- confrim -->
+    <Confirm :isShowConfirm="isShowConfirm" :confirmMsg="confirmMsg"
+      :value="value" @handleCanel="handleCanel"
+      @handleConfirm="handleConfirm(value)"></Confirm>
+    <!-- confirm end -->
   </div>
 </template>
 
@@ -61,11 +66,13 @@ import axios from 'axios'
 import httpUrl from '@/http_url'
 // import Vue from 'vue'
 import Toast from '@/components/toast'
+import Confirm from '@/components/confirm'
 export default {
   components: {
     Info,
     SubTab,
-    Toast
+    Toast,
+    Confirm
   },
   data () {
     return {
@@ -91,7 +98,11 @@ export default {
 
       isHasSubList: false, // 是否有 subList（用于 Info 组件）
       nowIndex: 0, // 当前选项（用于样式选中 active）
-      movePanel: '' // 用于样式切换：item1, item2, item3
+      movePanel: '', // 用于样式切换：item1, item2, item3
+
+      isShowConfirm: false,
+      confirmMsg: '',
+      value: null
     }
   },
   methods: {
@@ -337,26 +348,46 @@ export default {
       }
     },
     handleDeleteItem (val) {
-      for (let i=0;i<this.navList.length;i++) {
-        if (this.navList[i].id === val) {
-          this.navList.splice(i, 1)
-        }
-      }
-      this.isShowInfo = 0
-      this.isShowSubTab = false
+      this.value = val
+      // 删除提示框
+      this.isShowConfirm = true
+      this.confirmMsg = '确认删除吗？'
     },
     handleDeleteSubItem (val) {
-      for (let i=0;i<this.navList.length;i++) {
-        if (this.navList[i].id === val.tabId) {
-          for (let j=0;j<this.navList[i].sub_button.length;j++) {
-            if (this.navList[i].sub_button[j].id === val.subId) {
-              this.navList[i].sub_button.splice(j, 1)
-            }
+      this.value = val
+      // 删除提示框
+      this.isShowConfirm = true
+      this.confirmMsg = '确认删除吗？'
+    },
+    handleCanel () {
+      this.isShowConfirm = false
+    },
+    handleConfirm (value) {
+      if (value.subId === undefined) {
+        // 删除主菜单：value 里面只有 tabId
+        for (let i=0;i<this.navList.length;i++) {
+          if (this.navList[i].id === value.tabId) {
+            this.navList.splice(i, 1)
           }
-          this.navList[i].type = 'view'
         }
+        this.isShowInfo = 0
+        this.isShowSubTab = false
+        this.isShowConfirm = false
+      } else {
+        // 删除子菜单
+        for (let i=0;i<this.navList.length;i++) {
+          if (this.navList[i].id === value.tabId) {
+            for (let j=0;j<this.navList[i].sub_button.length;j++) {
+              if (this.navList[i].sub_button[j].id === value.subId) {
+                this.navList[i].sub_button.splice(j, 1)
+              }
+            }
+            this.navList[i].type = 'view'
+          }
+        }
+        this.isShowInfo = 0
+        this.isShowConfirm = false
       }
-      this.isShowInfo = 0
     },
     handleAddSubItem (val) {
       this.isShowInfo = 2

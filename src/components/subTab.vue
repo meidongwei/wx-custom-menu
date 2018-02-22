@@ -56,7 +56,7 @@ export default {
       this.nowIndex = this.subTabs.length - 1
     },
     handleUpdateSubItem (index) {
-      console.log(this.subTabs[index])
+      // console.log(this.subTabs[index])
       this.nowIndex = index
       this.$emit('handleUpdateSubItem', this.subTabs[index])
     }

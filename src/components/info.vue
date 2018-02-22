@@ -202,7 +202,7 @@ export default {
       this.$emit('handleUpdateData', this.itemObj)
     },
     handleDeleteItem () {
-      this.$emit('handleDeleteItem', this.itemObj.id)
+      this.$emit('handleDeleteItem', { tabId: this.itemObj.id })
     },
     handleDeleteSubItem () {
       let data = {
@@ -341,9 +341,13 @@ export default {
   align-items: center;
   padding: 20px 0 20px 20px;
 }
-.form-item-body .body-con img {
+.form-item-body .body-con a {
   opacity: .1;
   border: 1px dashed #000000;
+  padding: 20px;
+}
+.form-item-body .body-con img {
+  width: 60px;
 }
 .cardHover {
   margin: 0;

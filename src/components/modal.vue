@@ -134,6 +134,7 @@ export default {
   /* 去掉 bootstrap 默认宽度 */
   /* width: 600px; */
   width: auto;
+  top: -100px;
 }
 .m-btn {
   background-color: #e9e9e9;
