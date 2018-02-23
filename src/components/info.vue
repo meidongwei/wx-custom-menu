@@ -309,6 +309,7 @@ export default {
   margin-top: 11px;
   font-size: 14px;
   color: #333333;
+  width: 80px;
 }
 .form-item input,
 .form-item-body > .body-con > input {

@@ -65,7 +65,112 @@ Mock.mock(/getBrandMaterialList/, {
 			"update_time": 1517653803
 		},
 		"update_time": 1517653803
-	}, {
+	},
+	{
+		"media_id": "rNgdl_jXlgNDMtYATnHtvDp1wT8WMFzYO63jC5C8NPQ",
+		"content": {
+			"news_item": [{
+				"title": "测试2",
+				"author": "",
+				"digest": "测试2测试2测试2测试2测试2测试2测试2测试2测试2",
+				"content": "<p>测试2测试2测试2测试2测试2测试2测试2测试2测试2</p>",
+				"content_source_url": "",
+				"thumb_media_id": "rNgdl_jXlgNDMtYATnHtvODxOqqPkRzHLewbt0stlIc",
+				"show_cover_pic": 0,
+				"url": "http://mp.weixin.qq.com/s?__biz=MzI1OTg1MDU0OA==&mid=100000007&idx=1&sn=44ad7bedd438bb8734ab1ca4543c42c0&chksm=6a73e95c5d04604a4dfb54ea193273b03aa170644a3efca2a44f71abd3a74a7755272249a3a5#rd",
+				"thumb_url": "http://mmbiz.qpic.cn/mmbiz_jpg/ddy6TjufmWIwKBGE0DicgcoEPxpP257icbr32eNnW9PFeKNn12MxU5WJpibtHAib9sjJbicR8fSJJzrxtOAdnsnbabw/0?wx_fmt=jpeg",
+				"need_open_comment": 1,
+				"only_fans_can_comment": 0
+			}],
+			"create_time": 1517653803,
+			"update_time": 1517653803
+		},
+		"update_time": 1517653803
+	},
+	{
+		"media_id": "rNgdl_jXlgNDMtYATnHtvDp1wT8WMFzYO63jC5C8NPQ",
+		"content": {
+			"news_item": [{
+				"title": "测试2",
+				"author": "",
+				"digest": "测试2测试2测试2测试2测试2测试2测试2测试2测试2",
+				"content": "<p>测试2测试2测试2测试2测试2测试2测试2测试2测试2</p>",
+				"content_source_url": "",
+				"thumb_media_id": "rNgdl_jXlgNDMtYATnHtvODxOqqPkRzHLewbt0stlIc",
+				"show_cover_pic": 0,
+				"url": "http://mp.weixin.qq.com/s?__biz=MzI1OTg1MDU0OA==&mid=100000007&idx=1&sn=44ad7bedd438bb8734ab1ca4543c42c0&chksm=6a73e95c5d04604a4dfb54ea193273b03aa170644a3efca2a44f71abd3a74a7755272249a3a5#rd",
+				"thumb_url": "http://mmbiz.qpic.cn/mmbiz_jpg/ddy6TjufmWIwKBGE0DicgcoEPxpP257icbr32eNnW9PFeKNn12MxU5WJpibtHAib9sjJbicR8fSJJzrxtOAdnsnbabw/0?wx_fmt=jpeg",
+				"need_open_comment": 1,
+				"only_fans_can_comment": 0
+			}],
+			"create_time": 1517653803,
+			"update_time": 1517653803
+		},
+		"update_time": 1517653803
+	},
+	{
+		"media_id": "rNgdl_jXlgNDMtYATnHtvDp1wT8WMFzYO63jC5C8NPQ",
+		"content": {
+			"news_item": [{
+				"title": "测试2",
+				"author": "",
+				"digest": "测试2测试2测试2测试2测试2测试2测试2测试2测试2",
+				"content": "<p>测试2测试2测试2测试2测试2测试2测试2测试2测试2</p>",
+				"content_source_url": "",
+				"thumb_media_id": "rNgdl_jXlgNDMtYATnHtvODxOqqPkRzHLewbt0stlIc",
+				"show_cover_pic": 0,
+				"url": "http://mp.weixin.qq.com/s?__biz=MzI1OTg1MDU0OA==&mid=100000007&idx=1&sn=44ad7bedd438bb8734ab1ca4543c42c0&chksm=6a73e95c5d04604a4dfb54ea193273b03aa170644a3efca2a44f71abd3a74a7755272249a3a5#rd",
+				"thumb_url": "http://mmbiz.qpic.cn/mmbiz_jpg/ddy6TjufmWIwKBGE0DicgcoEPxpP257icbr32eNnW9PFeKNn12MxU5WJpibtHAib9sjJbicR8fSJJzrxtOAdnsnbabw/0?wx_fmt=jpeg",
+				"need_open_comment": 1,
+				"only_fans_can_comment": 0
+			}],
+			"create_time": 1517653803,
+			"update_time": 1517653803
+		},
+		"update_time": 1517653803
+	},
+	{
+		"media_id": "rNgdl_jXlgNDMtYATnHtvDp1wT8WMFzYO63jC5C8NPQ",
+		"content": {
+			"news_item": [{
+				"title": "测试2",
+				"author": "",
+				"digest": "测试2测试2测试2测试2测试2测试2测试2测试2测试2",
+				"content": "<p>测试2测试2测试2测试2测试2测试2测试2测试2测试2</p>",
+				"content_source_url": "",
+				"thumb_media_id": "rNgdl_jXlgNDMtYATnHtvODxOqqPkRzHLewbt0stlIc",
+				"show_cover_pic": 0,
+				"url": "http://mp.weixin.qq.com/s?__biz=MzI1OTg1MDU0OA==&mid=100000007&idx=1&sn=44ad7bedd438bb8734ab1ca4543c42c0&chksm=6a73e95c5d04604a4dfb54ea193273b03aa170644a3efca2a44f71abd3a74a7755272249a3a5#rd",
+				"thumb_url": "http://mmbiz.qpic.cn/mmbiz_jpg/ddy6TjufmWIwKBGE0DicgcoEPxpP257icbr32eNnW9PFeKNn12MxU5WJpibtHAib9sjJbicR8fSJJzrxtOAdnsnbabw/0?wx_fmt=jpeg",
+				"need_open_comment": 1,
+				"only_fans_can_comment": 0
+			}],
+			"create_time": 1517653803,
+			"update_time": 1517653803
+		},
+		"update_time": 1517653803
+	},
+	{
+		"media_id": "rNgdl_jXlgNDMtYATnHtvDp1wT8WMFzYO63jC5C8NPQ",
+		"content": {
+			"news_item": [{
+				"title": "测试2",
+				"author": "",
+				"digest": "测试2测试2测试2测试2测试2测试2测试2测试2测试2",
+				"content": "<p>测试2测试2测试2测试2测试2测试2测试2测试2测试2</p>",
+				"content_source_url": "",
+				"thumb_media_id": "rNgdl_jXlgNDMtYATnHtvODxOqqPkRzHLewbt0stlIc",
+				"show_cover_pic": 0,
+				"url": "http://mp.weixin.qq.com/s?__biz=MzI1OTg1MDU0OA==&mid=100000007&idx=1&sn=44ad7bedd438bb8734ab1ca4543c42c0&chksm=6a73e95c5d04604a4dfb54ea193273b03aa170644a3efca2a44f71abd3a74a7755272249a3a5#rd",
+				"thumb_url": "http://mmbiz.qpic.cn/mmbiz_jpg/ddy6TjufmWIwKBGE0DicgcoEPxpP257icbr32eNnW9PFeKNn12MxU5WJpibtHAib9sjJbicR8fSJJzrxtOAdnsnbabw/0?wx_fmt=jpeg",
+				"need_open_comment": 1,
+				"only_fans_can_comment": 0
+			}],
+			"create_time": 1517653803,
+			"update_time": 1517653803
+		},
+		"update_time": 1517653803
+	},{
 		"media_id": "rNgdl_jXlgNDMtYATnHtvFwyKomAptU7ZPlyQfkIUvI",
 		"content": {
 			"news_item": [{
