@@ -1,10 +1,10 @@
 <template>
   <div class="panel panel-default" style="border:0;border-radius:0;box-shadow:none;">
-    <div class="panel-heading">
+    <!-- <div class="panel-heading">
       <h3 class="panel-title">
         自定义菜单设置
       </h3>
-    </div>
+    </div> -->
     <div class="panel-body" style="display:flex;padding-right:15px;">
       <div class="segment">
         <div class="header">
