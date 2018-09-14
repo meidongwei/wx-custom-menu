@@ -13,7 +13,7 @@
       <!-- 主菜单名称 -->
       <div class="form-item">
         <h2>菜单名称</h2>
-        <div>
+        <div class="form-item-right">
           <input v-model="itemObj.name" @blur="handleUpdateData" maxlength="8" type="text">
           <p class="tip2">字数不超过4个汉字或8个字母</p>
         </div>
@@ -77,7 +77,7 @@
 
       <div class="form-item">
         <h2>子菜单名称</h2>
-        <div>
+        <div class="form-item-right">
           <input v-model="itemObj.name" @blur="handleUpdateSubData" maxlength="8" type="text">
           <p class="tip2">字数不超过8个汉字或16个字母</p>
         </div>
@@ -299,9 +299,14 @@ export default {
   margin-top: 20px;
   margin-bottom: 10px;
   padding: 0 20px;
+  width: 100%;
 }
 .form-item {
   display: flex;
+  width: 100%;
+}
+.form-item > .form-item-right {
+  flex: 1;
 }
 .form-item > h2,
 .form-item-body > .body-con > h2 {
@@ -309,12 +314,14 @@ export default {
   margin-top: 11px;
   font-size: 14px;
   color: #333333;
-  width: 80px;
+  /* width: 80px; */
+  flex: 0 0 80px;
 }
 .form-item input,
 .form-item-body > .body-con > input {
   height: 38px;
-  width: 600px;
+  /* width: 600px; */
+  width: 100%;
   padding-left: 10px;
   border-radius: 3px;
   /* border: none; */
